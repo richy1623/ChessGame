@@ -11,5 +11,3 @@ class Pawn(Piece):
 		screen.blit(self.piece, (self.x*self.size, self.y*self.size))
 		#pygame.draw.rect(screen, (150,150,150), (self.x*self.size, self.y*self.size, self.size,self.size))
 	
-	def move(self, screen):
-		pass

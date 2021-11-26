@@ -8,5 +8,7 @@ class Piece:
 		self.color = color # while = 0, black = 1
 		self.selected = False
 
-	def move(self, screen):
-		pass
+	def move(self, x, y):
+		#TODO: animate
+		self.x = x
+		self.y = y

@@ -9,3 +9,6 @@ class EventHandler:
 	def click(self, pos):
 		if self.board.rect.collidepoint(pos):
 			self.board.click(pos, self.rq)
+			
+	def addAnimation(self, item):
+		pass

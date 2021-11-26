@@ -43,9 +43,21 @@ class Board:
 		#if self.selected != '': self.selected.click() 
 		x = int((pos[0] - self.rect.x)/self.size)
 		y = int((pos[1] - self.rect.y)/self.size)
-		rq.add(self.squares[x][y])
-		self.selected = self.squares[x][y]
-		self.selected.click()
+		if self.selected == False:
+			if self.squares[x][y].piece != False:
+				self.selected = self.squares[x][y]
+				self.selected.click()
+				rq.add(self.selected)
+		else:
+			if self.selected is self.squares[x][y]:
+				rq.add(self.selected)
+			else:
+				#TODO: check valid
+				self.selected.movePiece(self.squares[x][y])
+				rq.add(self.selected)
+				rq.add(self.squares[x][y])
+			self.selected.click()
+			self.selected = False
 		return
 	def render(self, screen):
 		for x in range(8):

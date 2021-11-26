@@ -3,10 +3,12 @@ import pygame
 class Square:
 	def __init__(self, size, x, y):#x=0, y=0 is top left
 		self.rect = pygame.Rect(x*size, y*size, size, size)
+		self.x = x
+		self.y = y
 		self.color = (150, 150, 255) if (x+y)%2==0 else (50,50,50)
 		#self.color = (30*x, 0, 0) if (x+y)%2==0 else (0,30*y,0)
 		self.highlight = False
-		self.piece = ''
+		self.piece = False
 	
 	def addPiece(self, piece):
 		self.piece = piece
@@ -16,10 +18,16 @@ class Square:
 			pygame.draw.rect(screen, (150, 0, 0), self.rect)
 		else:
 			pygame.draw.rect(screen, self.color, self.rect)
-		if self.piece != '':
+		if self.piece != False:
 			self.piece.render(screen)
 		#TODO: return square
 			
 	def click(self):
 		self.highlight = not self.highlight
 		return self.highlight
+		
+	def movePiece(self, newsquare):
+		#animate
+		self.piece.move(newsquare.x, newsquare.y)
+		newsquare.addPiece(self.piece)
+		self.piece=False
