@@ -5,9 +5,12 @@ from PiecesPkg.Pieces import Pieces
 from PiecesPkg.Pawn import Pawn
 
 class Board:
-	def __init__(self, screensize):
+	def __init__(self, x, y, screensize):
 		self.reverse = False
 		self.size = int(screensize/8)
+		self.rect = pygame.Rect(x, y, screensize, screensize)
+		self.selected = False
+		
 		pieces = Pieces(self.size)
 		self.squares = [[Square(self.size, x, y) for y in range(8)] for x in range(8)]
 		#init pawns
@@ -36,7 +39,14 @@ class Board:
 		self.squares[4][0].addPiece(Pawn(4, 0, self.size, 0, pieces.kingb))
 		self.squares[4][7].addPiece(Pawn(4, 7, self.size, 0, pieces.kingw))
 		
-		
+	def click(self, pos, rq):
+		#if self.selected != '': self.selected.click() 
+		x = int((pos[0] - self.rect.x)/self.size)
+		y = int((pos[1] - self.rect.y)/self.size)
+		rq.add(self.squares[x][y])
+		self.selected = self.squares[x][y]
+		self.selected.click()
+		return
 	def render(self, screen):
 		for x in range(8):
 			for y in range(8) if not self.reverse else range(7,-1,-1):

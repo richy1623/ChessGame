@@ -2,6 +2,8 @@ import pygame
 from pygame.locals import *
 
 from Board import Board
+from RenderQueue import RenderQueue
+from EventHandler import EventHandler
 
 pygame.init()
 
@@ -17,17 +19,21 @@ pygame.display.set_caption("Chess")
 
 run = True
 
-board = Board(screenwidth)
+renderqueue = RenderQueue()
+board = Board(0, 0, screenwidth)
+eventhandler = EventHandler(renderqueue, board)
 board.render(screen)
 
+pygame.display.update()
 while run:
 	clock.tick(fps)
 	
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			run = False
-	
+		if event.type == pygame.MOUSEBUTTONDOWN: 
+			eventhandler.click(pygame.mouse.get_pos())
 	#tick
 	
 	#render
-	pygame.display.update()
+	if renderqueue.render(screen): pygame.display.update()
