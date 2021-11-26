@@ -4,6 +4,7 @@ from pygame.locals import *
 from Board import Board
 from RenderQueue import RenderQueue
 from EventHandler import EventHandler
+from Log import Log
 
 pygame.init()
 
@@ -21,7 +22,9 @@ run = True
 
 renderqueue = RenderQueue()
 board = Board(0, 0, screenwidth)
-eventhandler = EventHandler(renderqueue, board)
+log = Log()
+eventhandler = EventHandler(renderqueue, board, log)
+
 board.render(screen)
 
 pygame.display.update()
