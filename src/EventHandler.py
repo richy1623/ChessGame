@@ -15,7 +15,7 @@ class EventHandler:
 		self.rq.add(item)
 		
 	def logmove(self, piece, oldsquare, newsquare, action):
-		self.log.move(piece, oldsquare, newsquare, action)
+		self.log.move(piece, oldsquare, newsquare, action, False)
 		
 	def addAnimation(self, item):
 		pass

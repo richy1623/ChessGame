@@ -26,7 +26,7 @@ class Square:
 	def resetcolor(self):
 		self.color = (self.basecolor[0], self.basecolor[1], self.basecolor[2])
 		
-	def movePiece(self, newsquare):
+	def movePiece(self, newsquare, eh):
 		#animate
 		self.piece.move(newsquare.x, newsquare.y)
 		newsquare.addPiece(self.piece)

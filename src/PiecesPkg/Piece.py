@@ -8,6 +8,7 @@ class Piece:
 		self.color = color # while = 0, black = 1
 		self.selected = False
 		self.piece = piece
+		self.moved = False
 	
 	def render(self, screen):
 		screen.blit(self.piece, (self.x*self.size, self.y*self.size))
@@ -17,3 +18,4 @@ class Piece:
 		#TODO: animate
 		self.x = x
 		self.y = y
+		self.moved = True

@@ -44,6 +44,7 @@ class Board:
 		#init Queens
 		self.squares[3][0].addPiece(Queen(3, 0, self.size, 1, pieces.queenb))
 		self.squares[3][7].addPiece(Queen(3, 7, self.size, 0, pieces.queenw))
+		
 		#init Kings
 		self.squares[4][0].addPiece(King(4, 0, self.size, 1, pieces.kingb))
 		self.squares[4][7].addPiece(King(4, 7, self.size, 0, pieces.kingw))
@@ -63,17 +64,7 @@ class Board:
 				eventhandler.torender(self.selected)
 		else:
 			if self.selected is not self.squares[x][y]:
-				if  self.freemove:
-					eventhandler.logmove(self.selected.piece, self.selected, self.squares[x][y], 0)
-					self.selected.movePiece(self.squares[x][y])
-					eventhandler.torender(self.squares[x][y])
-				else:
-					for valid in self.validmoves:
-						if self.squares[x][y] == valid[0]: 
-							eventhandler.logmove(self.selected.piece, self.selected, self.squares[x][y], valid[1])
-							self.selected.movePiece(self.squares[x][y])
-							eventhandler.torender(self.squares[x][y])
-							break
+				self.move(x, y, eventhandler)
 			eventhandler.torender(self.selected)
 			for i in self.validmoves:
 				i[0].resetcolor()
@@ -82,7 +73,27 @@ class Board:
 			eventhandler.torender(self.selected)
 			self.validmoves = []
 			self.selected = False
-			
+	
+	def move(self, x, y, eventhandler):
+		if self.freemove:
+			eventhandler.logmove(self.selected.piece, self.selected, self.squares[x][y], 0)
+			self.selected.movePiece(self.squares[x][y])
+			eventhandler.torender(self.squares[x][y])
+		else:
+			for valid in self.validmoves:
+				if self.squares[x][y] == valid[0]: 
+					if valid[1] == 2:
+						self.squares[7][y].movePiece(self.squares[5][y], eventhandler)
+						eventhandler.torender(self.squares[5][y])
+						eventhandler.torender(self.squares[7][y])
+					elif valid[1] == 3:
+						self.squares[0][y].movePiece(self.squares[3][y], eventhandler)
+						eventhandler.torender(self.squares[0][y])
+						eventhandler.torender(self.squares[3][y])
+					eventhandler.logmove(self.selected.piece, self.selected, self.squares[x][y], valid[1])
+					self.selected.movePiece(self.squares[x][y], eventhandler)
+					eventhandler.torender(self.squares[x][y])
+					break	
 	def render(self, screen):
 		for x in range(8):
 			for y in range(8) if not self.reverse else range(7,-1,-1):
