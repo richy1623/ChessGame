@@ -13,7 +13,13 @@ class Piece:
 	def render(self, screen):
 		screen.blit(self.piece, (self.x*self.size, self.y*self.size))
 		#pygame.draw.rect(screen, (150,150,150), (self.x*self.size, self.y*self.size, self.size,self.size))
-
+	
+	def legalmoves(self, squares, lastmove):
+		return self.validmoves(squares)
+	
+	def validmoves(self, squares):
+		pass
+	
 	def move(self, x, y):
 		#TODO: animate
 		self.x = x

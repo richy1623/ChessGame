@@ -15,12 +15,16 @@ class Board:
 		self.size = int(screensize/8)
 		self.rect = pygame.Rect(x, y, screensize, screensize)
 		self.selected = False
+		self.pieces = Pieces(self.size)
 		self.setboard()
 		self.validmoves = []
 		self.freemove = False
+		self.lastmove = (-1, -1)
+		self.takenw = []
+		self.takenb = []
 		
 	def setboard(self):
-		pieces = Pieces(self.size)
+		pieces = self.pieces
 		self.squares = [[Square(self.size, x, y) for y in range(8)] for x in range(8)]
 		#init pawns
 		for i in range(8):
@@ -57,7 +61,7 @@ class Board:
 			if self.squares[x][y].piece != False:
 				self.selected = self.squares[x][y]
 				self.selected.recolor(5)
-				self.validmoves = self.selected.piece.validmoves(self.squares)
+				self.validmoves = self.selected.piece.legalmoves(self.squares, self.lastmove)
 				for i in self.validmoves:
 					i[0].recolor(3)
 					eventhandler.torender(i[0])
@@ -82,6 +86,13 @@ class Board:
 		else:
 			for valid in self.validmoves:
 				if self.squares[x][y] == valid[0]: 
+					if valid[1] == 6:
+						self.squares[x][self.lastmove[1]].movePiece(self.squares[x][y], eventhandler)
+						eventhandler.torender(self.squares[x][self.lastmove[1]])
+					if valid[1] == 7:
+						self.lastmove = (x,y)
+					else:
+						self.lastmove = (-1, -1)
 					if valid[1] == 2:
 						self.squares[7][y].movePiece(self.squares[5][y], eventhandler)
 						eventhandler.torender(self.squares[5][y])
@@ -93,7 +104,15 @@ class Board:
 					eventhandler.logmove(self.selected.piece, self.selected, self.squares[x][y], valid[1])
 					self.selected.movePiece(self.squares[x][y], eventhandler)
 					eventhandler.torender(self.squares[x][y])
+					if valid[1] in [4,5]:
+						self.promote(x,y)
 					break	
+	def promote(self, x, y):
+		if self.squares[x][y].piece.color==0:
+			self.squares[x][y].addPiece(Queen(x, y, self.size, 0, self.pieces.queenw))
+		else:
+			self.squares[x][y].addPiece(Queen(x, y, self.size, 1, self.pieces.queenb))
+	
 	def render(self, screen):
 		for x in range(8):
 			for y in range(8) if not self.reverse else range(7,-1,-1):
